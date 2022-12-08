@@ -42,7 +42,7 @@ func (d *d2ip) resp(w dns.ResponseWriter, q *dns.Msg) *dns.Msg {
 	d.queryCounter.Inc()
 
 	// Reject invalid queries.
-	if len(q.Question) != 1 || q.Question[0].Qtype != dns.ClassINET {
+	if len(q.Question) != 1 || q.Question[0].Qclass != dns.ClassINET {
 		logger.Warn("invalid query", zap.Stringer("from", w.RemoteAddr()))
 		d.errCounter.Inc()
 		return reject(q, dns.RcodeRefused)
