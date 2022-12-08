@@ -49,6 +49,7 @@ func (d *d2ip) resp(w dns.ResponseWriter, q *dns.Msg) *dns.Msg {
 	}
 
 	question := q.Question[0]
+	question.Name = dns.CanonicalName(question.Name)
 	// Parse ip addr from prefix.
 	s, suffixOk := trimFqdn(question.Name, d.domains)
 	if !suffixOk {

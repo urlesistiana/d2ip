@@ -37,7 +37,7 @@ func main() {
 
 	suffixes := make(map[string]struct{})
 	for _, s := range strings.Split(*domains, ",") {
-		s = dns.Fqdn(s)
+		s = dns.CanonicalName(s)
 		suffixes[s] = struct{}{}
 	}
 	h := &d2ip{
