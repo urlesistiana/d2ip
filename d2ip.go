@@ -52,7 +52,12 @@ func (d *d2ip) resp(w dns.ResponseWriter, q *dns.Msg) *dns.Msg {
 	// Parse ip addr from prefix.
 	s, suffixOk := trimFqdn(question.Name, d.domains)
 	if !suffixOk {
-		logger.Warn("invalid domain", zap.String("qname", question.Name), zap.Stringer("from", w.RemoteAddr()))
+		logger.Warn(
+			"invalid domain",
+			zap.String("qname", question.Name),
+			zap.Uint16("qtype", question.Qtype),
+			zap.Stringer("from", w.RemoteAddr()),
+		)
 		d.errCounter.Inc()
 		return reject(q, dns.RcodeRefused)
 	}
@@ -62,7 +67,12 @@ func (d *d2ip) resp(w dns.ResponseWriter, q *dns.Msg) *dns.Msg {
 	}
 	addr, err := netip.ParseAddr(s)
 	if err != nil {
-		logger.Warn("invalid ip", zap.String("qname", question.Name), zap.Stringer("from", w.RemoteAddr()))
+		logger.Warn(
+			"invalid ip",
+			zap.String("qname", question.Name),
+			zap.Uint16("qtype", question.Qtype),
+			zap.Stringer("from", w.RemoteAddr()),
+		)
 		d.errCounter.Inc()
 		return reject(q, dns.RcodeNameError)
 	}
